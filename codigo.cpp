@@ -1,5 +1,6 @@
 #include <iostream>
 #include <windows.h>
+#include <string>
 
 using namespace std;
 
@@ -34,6 +35,14 @@ double subtotal = 0.0;
 double descuento = 0.0;
 double totalPagar = 0.0;
 int esEstudiante = 0; 
+
+// arreglo para guardar el total de cada venta que se hace en el dia
+const int MAX_VENTAS = 100;
+double historialVentas[MAX_VENTAS];
+
+// arreglos paralelos con info de los productos, para poder recorrerlos con un for
+string nombreProductos[4] = {"Almuerzo Ejecutivo", "Pupusa", "Pan con Pollo", "Bebida/Refresco"};
+double preciosProductos[4] = {precioAlmuerzo, precioPupusas, precioPanes, precioBebida};
 
 // declaracion de funciones
 void procesarFacturacion();
@@ -149,6 +158,15 @@ void procesarFacturacion() {
     cout << "Seleccione una opcion: ";
     cin >> esEstudiante;
 
+    // si el usuario escribe texto en vez de un numero, cin queda en error
+    // esto limpia ese error y pide el dato de nuevo hasta que sea valido
+    while(cin.fail()) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Entrada no valida. Por favor ingresa 1 o 2: ";
+        cin >> esEstudiante;
+    }
+
     switch(esEstudiante) {
         case 1:
             descuento = subtotal * 0.10;
@@ -188,7 +206,13 @@ void guardarVenta() {
     totalAlmuerzosDia += cantAlmuerzo;
     totalPupusasDia += cantPupusas;
     totalPanesDia += cantPanes;
+    totalBebidasDia += cantBebida;
     totalVentasRealizadas++;
+
+    // guarda el total de esta venta en el historial (indice -1 porque ya se incremento arriba)
+    if(totalVentasRealizadas <= MAX_VENTAS) {
+        historialVentas[totalVentasRealizadas - 1] = totalPagar;
+    }
 }
 
 // muestra el cierre final de caja
@@ -209,4 +233,37 @@ void mostrarReporte() {
     cout << "\nTOTAL TOTAL RECAUDADO EN EL DIA: $" << totalRecaudadoDia << endl;
     for(int i=0; i<50; i++) cout << "=";
     cout << "\n             ¡Cierre de caja finalizado!" << endl;
+
+    // estadisticas usando el arreglo historialVentas
+    if(totalVentasRealizadas > 0) {
+        double ventaMasAlta = historialVentas[0];
+        double ventaMasBaja = historialVentas[0];
+        double sumaTotal = 0.0;
+
+        cout << "\n\n--- DETALLE DE CADA VENTA ---" << endl;
+        for(int i = 0; i < totalVentasRealizadas; i++) {
+            cout << "Venta #" << (i+1) << ": $" << historialVentas[i] << endl;
+            sumaTotal += historialVentas[i];
+            if(historialVentas[i] > ventaMasAlta) ventaMasAlta = historialVentas[i];
+            if(historialVentas[i] < ventaMasBaja) ventaMasBaja = historialVentas[i];
+        }
+
+        cout << "\nVenta mas alta del dia: $" << ventaMasAlta << endl;
+        cout << "Venta mas baja del dia: $" << ventaMasBaja << endl;
+        cout << "Promedio por venta: $" << (sumaTotal / totalVentasRealizadas) << endl;
+    }
+
+    // busca el producto mas vendido recorriendo el arreglo de totales
+    int totalesPorProducto[4] = {totalAlmuerzosDia, totalPupusasDia, totalPanesDia, totalBebidasDia};
+    int indiceMax = 0;
+    for(int i = 1; i < 4; i++) {
+        if(totalesPorProducto[i] > totalesPorProducto[indiceMax]) {
+            indiceMax = i;
+        }
+    }
+    if(totalesPorProducto[indiceMax] > 0) {
+        double ingresoProductoTop = totalesPorProducto[indiceMax] * preciosProductos[indiceMax];
+        cout << "\nProducto mas vendido del dia: " << nombreProductos[indiceMax]
+             << " (" << totalesPorProducto[indiceMax] << " unidades, $" << ingresoProductoTop << " generados)" << endl;
+    }
 }
