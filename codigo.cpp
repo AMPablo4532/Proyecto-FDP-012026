@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//todas las variables qie ocupa el sistema
+//todas las variables que ocupa el sistema
 double totalRecaudadoDia = 0.0;
 int totalAlmuerzosDia = 0;
 int totalPupusasDia = 0;
