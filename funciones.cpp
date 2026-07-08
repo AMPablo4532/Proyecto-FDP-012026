@@ -10,7 +10,7 @@ void procesarFacturacion() {
   cout << "2. No" << endl;
   cout << "Seleccione una opcion: ";
   cin >> esEstudiante;
-    //nota: los metodos fail y clear fueron implementados con ayuda de IA 
+    //nota: los metodos fail y clear fueron implementados con ayuda de IA (Google Gemini)
     //para validar que el usuario ingrese un numero 1 o 2
     while(cin.fail()) {
       cin.clear();
@@ -55,7 +55,7 @@ void procesarFacturacion() {
     cout << "Total: $" << totalPagar << endl;
     cout << "Gracias por su compra." << endl;
 
-    // Manejo de archivos aspecto generado por IA
+    // manejo de archivos, aspecto generado por IA (Google Gemini)
     ofstream archivo("factura.txt");
     if(archivo.is_open()) {
         archivo << "FACTURA CAFETERIA UNIVERSITARIA\n";
@@ -78,13 +78,14 @@ void procesarFacturacion() {
 }
 
 void guardarVenta() {
+  // acumulo todo en las variables globales del dia
   totalRecaudadoDia += totalPagar;
   totalAlmuerzosDia += cantAlmuerzo;
   totalPupusasDia += cantPupusas;
   totalPanesDia += cantPanes;
   totalBebidasDia += cantBebida;
   totalVentasRealizadas++;
-
+  // para evitar que se sobrecargue el sistema
   if(totalVentasRealizadas <= MAX_VENTAS) {
     historialVentas[totalVentasRealizadas - 1] = totalPagar;
   }
@@ -106,7 +107,7 @@ void mostrarReporte() {
         double ventaMasBaja = historialVentas[0];
         double sumaTotal = 0;
 
-        cout << "\nDetalle de ventas:" << endl;
+        cout << "Detalle de ventas:" << endl;
 
         for (int i = 0; i < totalVentasRealizadas; i++) {
           cout << "Venta " << i + 1 << ": $" << historialVentas[i] << endl;
@@ -124,7 +125,7 @@ void mostrarReporte() {
         cout << "Venta mas baja: $" << ventaMasBaja << endl;
         cout << "Promedio: $" << sumaTotal / totalVentasRealizadas << endl;
     }
-
+    // busca cual producto se vendio mas para el resumen final
     int totalesPorProducto[4] = {
       totalAlmuerzosDia,
       totalPupusasDia,
@@ -139,7 +140,7 @@ void mostrarReporte() {
       }
     }
     if (totalesPorProducto[indiceMax] > 0) {
-      cout << "\nProducto mas vendido: " << nombreProductos[indiceMax] << endl;
+      cout << "Producto mas vendido: " << nombreProductos[indiceMax] << endl;
       cout << "Cantidad: " << totalesPorProducto[indiceMax] << endl;
     }
 }

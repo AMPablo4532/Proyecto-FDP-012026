@@ -1,35 +1,37 @@
 #include <iostream>
 #include <windows.h>
 #include <string>
-#include "funciones.h" //enlace a las funciones externas
+#include "funciones.h"
 
 using namespace std;
 
-//todas las variables que ocupa el sistema
+//variables globales del sistema
 double totalRecaudadoDia = 0.0;
 int totalAlmuerzosDia = 0;
 int totalPupusasDia = 0;
 int totalPanesDia = 0;
 int totalBebidasDia = 0;
 int totalVentasRealizadas = 0;
-int otraCompra = 1; 
-
+int otraCompra = 1;
 int opcionPrincipal = 0;
 int productoSeleccionado = 0;
 int cantidad = 0;
+
+//cantidades por producto (carrito actual)
 int cantAlmuerzo = 0;
 int cantPupusas = 0;
 int cantPanes = 0;
 int cantBebida = 0;
 
+// precios de productos
 double precioAlmuerzo = 3.25;
 double precioPupusas = 0.60;
 double precioPanes = 2.00;
 double precioBebida = 1.00;
 double subtotal = 0.0;
-double descuento = 0.0;
+double descuento = 0.0; 
 double totalPagar = 0.0;
-int esEstudiante = 0; 
+int esEstudiante = 0;
 
 double historialVentas[MAX_VENTAS];
 
@@ -37,10 +39,10 @@ string nombreProductos[4] = {"Almuerzo Ejecutivo", "Pupusa", "Pan con Pollo", "B
 double preciosProductos[4] = {precioAlmuerzo, precioPupusas, precioPanes, precioBebida};
 
 int main() {
-  SetConsoleOutputCP(CP_UTF8);
+  SetConsoleOutputCP(CP_UTF8); 
 
   do {
-    opcionPrincipal = 0; 
+    opcionPrincipal = 0;
 
     cout << "\n=====================================================" << endl;
     cout << "=== BIENVENIDO AL SISTEMA DE COMIDA UNIVERSITARIA ===" << endl;
@@ -56,7 +58,8 @@ int main() {
       cin >> opcionPrincipal;
 
       switch(opcionPrincipal) {
-        case 1: 
+        case 1:
+          // muestra el menu de productos y deja que agregue uno a la vez
           cout << "\n--- PRODUCTOS DISPONIBLES ---" << endl;
           cout << "1. Almuerzo Ejecutivo ------- $" << precioAlmuerzo << endl;
           cout << "2. Pupusa (unidad) ---------- $" << precioPupusas << endl;
@@ -70,13 +73,13 @@ int main() {
             cin >> cantidad;
 
             if(cantidad > 0) {
-                switch(productoSeleccionado) {
-                  case 1: cantAlmuerzo += cantidad; break;
-                  case 2: cantPupusas += cantidad; break;
-                  case 3: cantPanes += cantidad; break;
-                  case 4: cantBebida += cantidad; break;
-                }
-                cout << "¡Producto(s) agregado(s) con exito!" << endl;
+              switch(productoSeleccionado) {
+                case 1: cantAlmuerzo += cantidad; break;
+                case 2: cantPupusas += cantidad; break;
+                case 3: cantPanes += cantidad; break;
+                case 4: cantBebida += cantidad; break;
+              }
+              cout << "¡Producto(s) agregado(s) con exito!" << endl;
             } else {
               cout << "Cantidad no valida. Intente de nuevo." << endl;
             }
@@ -85,15 +88,16 @@ int main() {
           }
           break;
 
-        case 2: 
+        case 2:
+          // detalle del carrito, solo muestra lo que tenga cantidad mayor a 0
           cout << "\n--- DETALLE DE TU PEDIDO ---" << endl;
           if(cantAlmuerzo > 0) cout << "Almuerzos: " << cantAlmuerzo << " (Subtotal: $" << cantAlmuerzo*precioAlmuerzo << ")" << endl;
           if(cantPupusas > 0)  cout << "Pupusas: " << cantPupusas << " (Subtotal: $" << cantPupusas*precioPupusas << ")" << endl;
           if(cantPanes > 0)    cout << "Panes con Pollo: " << cantPanes << " (Subtotal: $" << cantPanes*precioPanes << ")" << endl;
           if(cantBebida > 0)   cout << "Bebidas: " << cantBebida << " (Subtotal: $" << cantBebida*precioBebida << ")" << endl;
-          
+
           subtotal = (cantAlmuerzo * precioAlmuerzo) + (cantPupusas * precioPupusas) + (cantPanes * precioPanes) + (cantBebida * precioBebida);
-          
+
           if(subtotal == 0) {
             cout << "Tu carrito esta vacio. ¡Agrega productos en la opcion 1!" << endl;
           } else {
@@ -101,12 +105,13 @@ int main() {
           }
           break;
 
-        case 3: 
+        case 3:
+          // vacia el carrito, ojo que esto no toca el historial de ventas ya facturadas
           cantAlmuerzo = 0; cantPupusas = 0; cantPanes = 0; cantBebida = 0;
           cout << "\n¡Pedido cancelado y carrito vaciado exitosamente!" << endl;
           break;
 
-        case 4: 
+        case 4:
           cout << "\nProcediendo al cierre de la cuenta..." << endl;
           break;
 
@@ -116,13 +121,14 @@ int main() {
       }
     }
 
+    // recalcula el subtotal por si acaso, aunque ya se calculo arriba en la opcion 2
     subtotal = (cantAlmuerzo*precioAlmuerzo) + (cantPupusas*precioPupusas) + (cantPanes*precioPanes) + (cantBebida*precioBebida);
 
     if(subtotal == 0) {
       cout << "\nNo se realizo ninguna compra en esta sesion." << endl;
     } else {
       procesarFacturacion();
-      cantAlmuerzo = 0; cantPupusas = 0; cantPanes = 0; cantBebida = 0;
+      cantAlmuerzo = 0; cantPupusas = 0; cantPanes = 0; cantBebida = 0; // limpiar para el siguiente cliente
     }
 
     cout << "\n[ADMINISTRACION] ¿Desea registrar una nueva venta del dia?" << endl;
@@ -130,7 +136,7 @@ int main() {
     cout << "Seleccione una opcion: ";
     cin >> otraCompra;
 
-  } while(otraCompra == 1); 
+  } while(otraCompra == 1);
 
   mostrarReporte();
   return 0;

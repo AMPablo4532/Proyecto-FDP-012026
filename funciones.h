@@ -5,9 +5,9 @@
 using namespace std;
 
 //nota: Las siguientes declaraciones extern fueron implementadas 
-//con ayuda de IA para enlazar las variables del archivo principal
+//con ayuda de IA (Google Gemini) para enlazar las variables del archivo principal
 const int MAX_VENTAS = 100;
-//variables externas (en archivo codigo.cpp)
+//variables externas definidas en codigo.cpp
 extern double totalRecaudadoDia;
 extern int totalAlmuerzosDia;
 extern int totalPupusasDia;
@@ -33,7 +33,7 @@ extern int esEstudiante;
 extern double historialVentas[MAX_VENTAS];
 extern string nombreProductos[4];
 extern double preciosProductos[4];
-//prototipos de las funciones void
+//prototipos de las funciones del sistema
 void procesarFacturacion();
 void guardarVenta();
 void mostrarReporte();
