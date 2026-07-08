@@ -7,7 +7,7 @@
 
 **Estudiantes:**
 - Ayala Menjívar, Juan Pablo — 00149726
-- Cerón Ponzeand, José Antonio — 00013826
+- Cerón Ponzeand, José Antonio — 00089826
 - Navarro Adame, Ricardo Antonio — 00173626
 - Osorio Rivera, Ernesto Josue — 00013826
 
